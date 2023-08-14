@@ -19,7 +19,7 @@ column_C = ['A', 'S', 'D', 'F', 'G', 'H', 'J', 'K', 'L', 'Z']
 game_over = False
 
 # Credit
-credit = 20
+credit = 200
 
 # Add font to the game
 font = pygame.font.Font(None, 36)
@@ -76,8 +76,8 @@ def another_spin():
     window.blit(message, message_rect)
     pygame.display.update()
     
-    # Set a timer for the duration of the message, let it be 20 seconds
-    message_duration = 20000
+    # Set a timer for the duration of the message
+    message_duration = 60000 #miliseconds
     start_time = pygame.time.get_ticks()
     while pygame.time.get_ticks() - start_time < message_duration:
         for event in pygame.event.get():
@@ -106,21 +106,24 @@ def main_loop():
         first_num = random.randint(0, 9)
         second_num = random.randint(0, 9)
         third_num = random.randint(0, 9)
+        # 1 / 1000 probability of winning
 
         combination = column_A[first_num] + column_B[second_num] + column_C[third_num]
-        print(combination)
+        
         display_values(combination, border_size)
         credit_left(credit)
         
         if first_num == second_num and second_num == third_num:
-            game_over = True
+            
             print("You have won!")
+            credit += 300
+            
         
         # Invoke the another_spin() function that will determine the next spin
         if not another_spin():
             break
         credit -= 1
-        print(credit)
+        
         
     
     
