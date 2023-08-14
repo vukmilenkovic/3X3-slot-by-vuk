@@ -5,7 +5,7 @@ import pygame
 # Initialize pygame
 pygame.init()
 
-window_width, window_height = 640, 480
+window_width, window_height = 320, 240
 window = pygame.display.set_mode((window_width, window_height))
 pygame.display.set_caption('Slots by Vuk')
 
@@ -53,14 +53,26 @@ def display_values(value_text, border_size):
     slot_text_rect = slot_text_with_borders.get_rect(center=(window_width // 2, window_height // 2))
     window.blit(slot_text_with_borders, slot_text_rect)
 
+# A function that displays the users remeindeing credit
+def credit_left(credit):
+    global cost_to_play
+    current_credit = str(credit)
+    credit_text = font.render("Credit: " + current_credit, True, white)
+
+    credit_text_rect = credit_text.get_rect(center=(window_width // 2, window_height - credit_text.get_height() // 2))
+    
+    window.blit(credit_text, credit_text_rect)
+    pygame.display.update()
+
 
 
 # A function that that returns true if the player choses to spin one more time
 def another_spin():
     global game_over
     # Update the screen to show the message 'Another spin?'
-    message = font.render('Another spin?', True, white)
-    message_rect = message.get_rect(center=(window_width // 2, window_height - message.get_height() //2))
+    
+    message = font.render('Press SPACE to spin again', True, white)
+    message_rect = message.get_rect(center=(window_width // 2, message.get_height() // 2))
     window.blit(message, message_rect)
     pygame.display.update()
     
@@ -82,8 +94,8 @@ def another_spin():
 # Main loop
 def main_loop():
     global column_A, column_B, column_C, credit, game_over 
-    count = 0
     border_size = 4
+
     while not game_over and credit > cost_to_play:
         # The ability to quit the game
         for event in pygame.event.get():
@@ -96,7 +108,10 @@ def main_loop():
         third_num = random.randint(0, 9)
 
         combination = column_A[first_num] + column_B[second_num] + column_C[third_num]
+        print(combination)
         display_values(combination, border_size)
+        credit_left(credit)
+        
         if first_num == second_num and second_num == third_num:
             game_over = True
             print("You have won!")
@@ -105,8 +120,9 @@ def main_loop():
         if not another_spin():
             break
         credit -= 1
-        count += 1
-        print(count)
+        print(credit)
+        
+    
     
     game_over = True
 
