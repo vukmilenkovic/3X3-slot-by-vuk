@@ -29,6 +29,8 @@ cost_to_play = 1
 
 # Basic colors
 black = (0, 0, 0)
+background_color = (244, 242, 222)
+fields_color = (31, 110, 140)
 white = (255, 255, 255)
 game_over_color = (255, 0, 0)
 
@@ -61,10 +63,10 @@ def ask_for_credit():
                             # Handle invalid input (e.g., non-integer values)
                             pass
                         
-        window.fill(black)
+        window.fill(background_color)
 
-        pygame.draw.rect(window, white, input_rect)
-        text_surface = font.render(user_input, True, black)
+        pygame.draw.rect(window, fields_color, input_rect)
+        text_surface = font.render(user_input, True, white)
         window.blit(text_surface, input_rect)
 
         input_rect.w = max(100, text_surface.get_width()+10)
@@ -81,7 +83,7 @@ def display_values(value_text, border_size):
     # Add padding and a border
     padding = 30
     
-    window.fill(black)
+    window.fill(background_color)
 
     slot_text = font.render(value_text, True, white)
 
@@ -89,8 +91,11 @@ def display_values(value_text, border_size):
     slot_width = slot_text.get_width() + 2 * (padding + border_size)
     slot_height = slot_text.get_height() + 2 * (padding + border_size)
     slot_text_with_borders = pygame.Surface((slot_width, slot_height), pygame.SRCALPHA)
+    slot_text_with_borders.fill(fields_color)
 
-    pygame.draw.rect(slot_text_with_borders, white, slot_text_with_borders.get_rect(), border_size)
+
+    pygame.draw.rect(slot_text_with_borders, fields_color, slot_text_with_borders.get_rect(), border_size)
+    
 
     slot_text_with_borders.blit(slot_text, (padding + border_size, padding + border_size))
 
@@ -101,7 +106,7 @@ def display_values(value_text, border_size):
 def credit_left(credit):
     global cost_to_play
     current_credit = str(credit)
-    credit_text = font.render("Credit: " + current_credit, True, white)
+    credit_text = font.render("Credit: " + current_credit, True, fields_color)
 
     credit_text_rect = credit_text.get_rect(center=(window_width // 2, window_height - credit_text.get_height() // 2))
     
@@ -115,7 +120,7 @@ def another_spin():
     global game_over
     # Update the screen to show the message 'Another spin?'
     
-    message = font.render('Press SPACE to spin again', True, white)
+    message = font.render('Press SPACE to spin again', True, fields_color)
     message_rect = message.get_rect(center=(window_width // 2, message.get_height() // 2))
     window.blit(message, message_rect)
     pygame.display.update()
@@ -138,7 +143,7 @@ def another_spin():
 # Main loop
 def main_loop():
     global column_A, column_B, column_C, credit, game_over 
-    border_size = 4
+    border_size = 0
 
     while not game_over:
         ask_for_credit()
