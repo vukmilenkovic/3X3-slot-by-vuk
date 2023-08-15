@@ -19,7 +19,7 @@ column_C = ['A', 'S', 'D', 'F', 'G', 'H', 'J', 'K', 'L', 'Z']
 game_over = False
 
 # Credit
-credit = 200
+credit = 1
 
 # Add font to the game
 font = pygame.font.Font(None, 36)
@@ -31,6 +31,50 @@ cost_to_play = 1
 black = (0, 0, 0)
 white = (255, 255, 255)
 game_over_color = (255, 0, 0)
+
+clock = pygame.time.Clock()
+
+# Function that runs before the main loop, asking the user for the amount of credit they will risk
+def ask_for_credit():
+    global credit
+    user_input = ''
+    input_rect = pygame.Rect(110, 110, 90, 32)
+    while credit <= 1 and credit >= 0:
+        for event in pygame.event.get():
+            if event.type == pygame.QUIT:
+                pygame.quit()
+                sys.exit()
+            if event.type == pygame.KEYDOWN:
+                # Check for backspace
+                if event.key == pygame.K_BACKSPACE:
+                    # get text input from 0 to -1 i.e. end.
+                    user_input = user_input[:-1]
+                # Unicode standard is used for string
+                # formation
+                else:
+                    user_input += event.unicode
+                if event.key == pygame.K_RETURN:  # Check for ENTER key
+                        try:
+                            credit = int(user_input)
+                            return credit  # Convert user_input to an integer
+                        except ValueError:
+                            # Handle invalid input (e.g., non-integer values)
+                            pass
+                        
+        window.fill(black)
+
+        pygame.draw.rect(window, white, input_rect)
+        text_surface = font.render(user_input, True, black)
+        window.blit(text_surface, input_rect)
+
+        input_rect.w = max(100, text_surface.get_width()+10)
+        pygame.display.update()
+        
+        
+        clock.tick(60)
+        
+        
+
 
 # A function that will display the values from the spin to the screen
 def display_values(value_text, border_size):
@@ -96,38 +140,42 @@ def main_loop():
     global column_A, column_B, column_C, credit, game_over 
     border_size = 4
 
-    while not game_over and credit > cost_to_play:
-        # The ability to quit the game
-        for event in pygame.event.get():
-            if event.type == pygame.QUIT:
-                game_over = True
-                sys.exit()
-
-        first_num = random.randint(0, 9)
-        second_num = random.randint(0, 9)
-        third_num = random.randint(0, 9)
-        # 1 / 1000 probability of winning
-
-        combination = column_A[first_num] + column_B[second_num] + column_C[third_num]
-        
-        display_values(combination, border_size)
-        credit_left(credit)
-        
-        if first_num == second_num and second_num == third_num:
+    while not game_over:
+        ask_for_credit()
+        while credit > cost_to_play:
+            # The ability to quit the game
+            for event in pygame.event.get():
+                if event.type == pygame.QUIT:
+                    game_over = True
+                    sys.exit()
             
-            print("You have won!")
-            credit += 300
+            
+            first_num = random.randint(0, 9)
+            second_num = random.randint(0, 9)
+            third_num = random.randint(0, 9)
+            # 1 / 1000 probability of winning
+
+            combination = column_A[first_num] + column_B[second_num] + column_C[third_num]
+            
+            
+            display_values(combination, border_size)
+            credit_left(credit)
+            
+            if first_num == second_num and second_num == third_num:
+                
+                print("You have won!")
+                credit += 300
+                
+            
+            # Invoke the another_spin() function that will determine the next spin
+            if not another_spin():
+                break
+            credit -= 1
+            
             
         
-        # Invoke the another_spin() function that will determine the next spin
-        if not another_spin():
-            break
-        credit -= 1
         
-        
-    
-    
-    game_over = True
+        game_over = True
 
 
 
