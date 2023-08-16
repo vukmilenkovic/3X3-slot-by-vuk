@@ -5,7 +5,7 @@ import pygame
 # Initialize pygame
 pygame.init()
 
-window_width, window_height = 320, 240
+window_width, window_height = 450, 330
 window = pygame.display.set_mode((window_width, window_height))
 pygame.display.set_caption('Slots by Vuk')
 
@@ -27,6 +27,8 @@ font = pygame.font.Font(None, 36)
 # Cost of a spin
 cost_to_play = 1
 
+padding = 30
+
 # Basic colors
 black = (0, 0, 0)
 background_color = (244, 242, 222)
@@ -38,9 +40,13 @@ clock = pygame.time.Clock()
 
 # Function that runs before the main loop, asking the user for the amount of credit they will risk
 def ask_for_credit():
-    global credit
+    global credit, padding
+    # Values for the bottom rect that will ask for the amount of credit
     user_input = ''
-    input_rect = pygame.Rect(110, 110, 90, 32)
+    input_rect_y = window_height - (window_height // 2)
+    input_rect_x = (window_width // 2) - 45
+    input_rect = pygame.Rect(input_rect_x, input_rect_y, 100, 32)
+    
     while credit <= 1 and credit >= 0:
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
@@ -64,25 +70,26 @@ def ask_for_credit():
                             pass
                         
         window.fill(background_color)
+        # Draw the first rect that displays the message
+        user_message = font.render("Input the amount of credit", True, fields_color)
+        user_message_rect = user_message.get_rect(center=(window_width // 2, user_message.get_height() // 2))
+        user_message_rect.y += padding
 
+        window.blit(user_message, user_message_rect)
+        pygame.display.update()
+        
+        # Draw the second rect that takes the input
         pygame.draw.rect(window, fields_color, input_rect)
         text_surface = font.render(user_input, True, white)
         window.blit(text_surface, input_rect)
 
-        input_rect.w = max(100, text_surface.get_width()+10)
         pygame.display.update()
-        
-        
         clock.tick(60)
         
-        
-
-
 # A function that will display the values from the spin to the screen
 def display_values(value_text, border_size):
     # Add padding and a border
-    padding = 30
-    
+    global padding
     window.fill(background_color)
 
     slot_text = font.render(value_text, True, white)
@@ -93,10 +100,8 @@ def display_values(value_text, border_size):
     slot_text_with_borders = pygame.Surface((slot_width, slot_height), pygame.SRCALPHA)
     slot_text_with_borders.fill(fields_color)
 
-
     pygame.draw.rect(slot_text_with_borders, fields_color, slot_text_with_borders.get_rect(), border_size)
     
-
     slot_text_with_borders.blit(slot_text, (padding + border_size, padding + border_size))
 
     slot_text_rect = slot_text_with_borders.get_rect(center=(window_width // 2, window_height // 2))
@@ -104,24 +109,23 @@ def display_values(value_text, border_size):
 
 # A function that displays the users remeindeing credit
 def credit_left(credit):
-    global cost_to_play
+    global cost_to_play, padding
     current_credit = str(credit)
     credit_text = font.render("Credit: " + current_credit, True, fields_color)
 
     credit_text_rect = credit_text.get_rect(center=(window_width // 2, window_height - credit_text.get_height() // 2))
+    credit_text_rect.y -= padding
     
     window.blit(credit_text, credit_text_rect)
     pygame.display.update()
 
-
-
 # A function that that returns true if the player choses to spin one more time
 def another_spin():
-    global game_over
+    global game_over, padding
     # Update the screen to show the message 'Another spin?'
-    
     message = font.render('Press SPACE to spin again', True, fields_color)
     message_rect = message.get_rect(center=(window_width // 2, message.get_height() // 2))
+    message_rect.y += padding
     window.blit(message, message_rect)
     pygame.display.update()
     
@@ -139,7 +143,6 @@ def another_spin():
                     return True
     return False
 
-
 # Main loop
 def main_loop():
     global column_A, column_B, column_C, credit, game_over 
@@ -154,14 +157,11 @@ def main_loop():
                     game_over = True
                     sys.exit()
             
-            
             first_num = random.randint(0, 9)
             second_num = random.randint(0, 9)
             third_num = random.randint(0, 9)
             # 1 / 1000 probability of winning
-
             combination = column_A[first_num] + column_B[second_num] + column_C[third_num]
-            
             
             display_values(combination, border_size)
             credit_left(credit)
@@ -171,18 +171,12 @@ def main_loop():
                 print("You have won!")
                 credit += 300
                 
-            
             # Invoke the another_spin() function that will determine the next spin
             if not another_spin():
                 break
             credit -= 1
-            
-            
-        
         
         game_over = True
-
-
 
 if __name__ == '__main__':
     main_loop()
