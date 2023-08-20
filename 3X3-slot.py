@@ -32,9 +32,9 @@ pygame.display.set_caption('Slots by Vuk')
 # Column_A after changes
 column_A = ['7', 'B', 'B', 'B', 'W', 'W', 'R', 'P', 'P', 'P', 'P', 'P', 'P', 'P', 'L', 'L', 'L', 'L', 'L', 'C', 'C'] # 21 Characters
 # Column_B after changes
-column_B = ['7', 'B', 'B', 'W', 'W', 'R', 'R', 'R', 'R', 'R' 'P', 'P', 'P', 'L', 'L', 'L', 'L', 'L', 'C', 'C', 'C', 'C', 'C', 'C'] # 24 Characters
+column_B = ['7', 'B', 'B', 'W', 'W', 'R', 'R', 'R', 'R', 'R', 'P', 'P', 'P', 'L', 'L', 'L', 'L', 'L', 'C', 'C', 'C', 'C', 'C', 'C'] # 24 Characters
 # Column_C after changes
-column_C = ['7', 'B', 'W', 'W', 'R', 'R', 'R', 'R', 'R', 'R', 'R', 'R', 'R' 'P', 'P', 'P', 'L', 'L', 'L', 'L', 'C', 'C', 'C', 'C'] # 23 characters
+column_C = ['7', 'B', 'W', 'W', 'R', 'R', 'R', 'R', 'R', 'R', 'R', 'R', 'R', 'P', 'P', 'P', 'L', 'L', 'L', 'L', 'C', 'C', 'C', 'C'] # 23 characters
 
 # Game over boolean
 game_over = False
@@ -69,19 +69,23 @@ def combination_check(combination):
     if bet == 1:
         if combination[0] == '7' and combination[1] == '7' and combination[2] == '7':
             credit += 200
+            print('jackpot')
         elif combination[0] == 'B' and combination[1] == 'B' and combination[2] == 'B':
             credit += 100
+            print('jackpot')
         elif combination[0] == 'W' and combination[1] == 'W' and combination[2] == 'W':
             credit += 100
+            print('jackpot')
         elif combination[0] == 'W' and combination[1] == 'W' and combination[2] == 'B':
             credit += 100
+            print('jackpot')
         elif combination[0] == 'R' and combination[1] == 'R' and combination[2] == 'R':
             credit += 18
         elif combination[0] == 'R' and combination[1] == 'R' and combination[2] == 'B':
             credit += 18
-        elif combination[0] == 'F' and combination[1] == 'F' and combination[2] == 'F':
+        elif combination[0] == 'P' and combination[1] == 'P' and combination[2] == 'P':
             credit += 14
-        elif combination[0] == 'F' and combination[1] == 'F' and combination[2] == 'B':
+        elif combination[0] == 'P' and combination[1] == 'P' and combination[2] == 'B':
             credit += 14
         elif combination[0] == 'L' and combination[1] == 'L' and combination[2] == 'L':
             credit += 10
@@ -94,19 +98,23 @@ def combination_check(combination):
     elif bet == 3:
         if combination[0] == '7' and combination[1] == '7' and combination[2] == '7':
             credit += 600
+            print('jackpot')
         elif combination[0] == 'B' and combination[1] == 'B' and combination[2] == 'B':
             credit += 300
+            print('jackpot')
         elif combination[0] == 'W' and combination[1] == 'W' and combination[2] == 'W':
             credit += 300
+            print('jackpot')
         elif combination[0] == 'W' and combination[1] == 'W' and combination[2] == 'B':
             credit += 300
+            print('jackpot')
         elif combination[0] == 'R' and combination[1] == 'R' and combination[2] == 'R':
             credit += 54
         elif combination[0] == 'R' and combination[1] == 'R' and combination[2] == 'B':
             credit += 54
-        elif combination[0] == 'F' and combination[1] == 'F' and combination[2] == 'F':
+        elif combination[0] == 'P' and combination[1] == 'P' and combination[2] == 'P':
             credit += 42
-        elif combination[0] == 'F' and combination[1] == 'F' and combination[2] == 'B':
+        elif combination[0] == 'P' and combination[1] == 'P' and combination[2] == 'B':
             credit += 42
         elif combination[0] == 'L' and combination[1] == 'L' and combination[2] == 'L':
             credit += 30
@@ -120,19 +128,23 @@ def combination_check(combination):
     elif bet == 5:
         if combination[0] == '7' and combination[1] == '7' and combination[2] == '7':
             credit += 1000
+            print('jackpot')
         elif combination[0] == 'B' and combination[1] == 'B' and combination[2] == 'B':
             credit += 500
+            print('jackpot')
         elif combination[0] == 'W' and combination[1] == 'W' and combination[2] == 'W':
             credit += 500
+            print('jackpot')
         elif combination[0] == 'W' and combination[1] == 'W' and combination[2] == 'B':
             credit += 500
+            print('jackpot')
         elif combination[0] == 'R' and combination[1] == 'R' and combination[2] == 'R':
             credit += 90
         elif combination[0] == 'R' and combination[1] == 'R' and combination[2] == 'B':
             credit += 90
-        elif combination[0] == 'F' and combination[1] == 'F' and combination[2] == 'F':
+        elif combination[0] == 'P' and combination[1] == 'P' and combination[2] == 'P':
             credit += 60
-        elif combination[0] == 'F' and combination[1] == 'F' and combination[2] == 'B':
+        elif combination[0] == 'P' and combination[1] == 'P' and combination[2] == 'B':
             credit += 60
         elif combination[0] == 'L' and combination[1] == 'L' and combination[2] == 'L':
             credit += 50
@@ -268,11 +280,13 @@ def main_loop():
                     sys.exit()
             
             # New values for the random numbers from each of the lists
-            first_num = random.randint(0, 20)
-            second_num = random.randint(0, 22)
-            third_num = random.randint(0, 22)
+            first_num = random.randint(0, len(column_A) - 1)
+            second_num = random.randint(0, len(column_B) - 1)
+            third_num = random.randint(0, len(column_C) - 1)
             # 1 / 1000 probability of winning
             combination = column_A[first_num] + column_B[second_num] + column_C[third_num]
+            if len(combination) > 3:
+                print(combination)
             
             display_values(combination, border_size)
             credit_left(credit)
