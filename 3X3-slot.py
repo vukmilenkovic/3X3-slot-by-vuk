@@ -5,7 +5,7 @@ import pygame
 # Initialize pygame
 pygame.init()
 
-window_width, window_height = 450, 330
+window_width, window_height = 640, 480
 window = pygame.display.set_mode((window_width, window_height))
 pygame.display.set_caption('Slots by Vuk')
 
@@ -47,6 +47,11 @@ bet = 3
 
 # Add font to the game
 font = pygame.font.Font(None, 36)
+font_big = pygame.font.Font(None, 72)
+font_medium = pygame.font.Font(None, 52)
+
+# Mouse
+mouse = pygame.mouse.get_pos()
 
 # Cost of a spin
 cost_to_play = 1
@@ -61,6 +66,25 @@ white = (255, 255, 255)
 game_over_color = (255, 0, 0)
 
 clock = pygame.time.Clock()
+
+# Write a function that will display a button while the game is running which will influence the amount of BET user shooses, 1,3 or 5
+def bet_amount():
+    global bet
+    # Every time the user clicks on the button the bet should move one step up: from 1 to 3, from 3 to 5, from 5 to 1
+    for event in pygame.event.get():
+          
+        if event.type == pygame.QUIT:
+            pygame.quit()
+              
+        #checks if a mouse is clicked
+        if event.type == pygame.MOUSEBUTTONDOWN:
+              
+            #if the mouse is clicked on the
+            # button the game is terminated
+            if window_width/2 <= mouse[0] <= window_width/2+140 and window_height/2 <= mouse[1] <= window_height/2+40:
+                pygame.quit()
+
+
 
 # Create a new function that will check the combination that the random generators got and adjust the prize accordingly
 def combination_check(combination):
@@ -155,19 +179,15 @@ def combination_check(combination):
         elif combination[0] == 'C' and combination[1] in column_B and combination[2] in column_C:
             credit += 10
 
-    
-
-    
-        
 
 # Function that runs before the main loop, asking the user for the amount of credit they will risk
 def ask_for_credit():
     global credit, padding, bet
     # Values for the bottom rect that will ask for the amount of credit
     user_input = ''
-    input_rect_y = window_height - (window_height // 2)
-    input_rect_x = (window_width // 2) - 45
-    input_rect = pygame.Rect(input_rect_x, input_rect_y, 100, 32)
+    input_rect_y = window_height / 2 - 60
+    input_rect_x = window_width / 2 - 100
+    input_rect = pygame.Rect(input_rect_x, input_rect_y, 200, 120)
     
     while credit <= 1 and credit >= 0:
         for event in pygame.event.get():
@@ -193,17 +213,18 @@ def ask_for_credit():
                         
         window.fill(background_color)
         # Draw the first rect that displays the message
-        user_message = font.render("Input the amount of credit", True, fields_color)
+        user_message = font_medium.render("Input the amount of credit", True, fields_color)
         user_message_rect = user_message.get_rect(center=(window_width // 2, user_message.get_height() // 2))
         user_message_rect.y += padding
+        
 
         window.blit(user_message, user_message_rect)
         pygame.display.update()
         
         # Draw the second rect that takes the input
         pygame.draw.rect(window, fields_color, input_rect)
-        text_surface = font.render(user_input, True, white)
-        window.blit(text_surface, input_rect)
+        text_surface = font_big.render(user_input, True, white)
+        window.blit(text_surface, ((input_rect.x + (input_rect.width - text_surface.get_width()) // 2), input_rect.y + (input_rect.height - text_surface.get_height()) // 2))
 
         pygame.display.update()
         clock.tick(60)
@@ -213,18 +234,17 @@ def display_values(value_text, border_size):
     # Add padding and a border
     global padding
     window.fill(background_color)
-
-    slot_text = font.render(value_text, True, white)
-
+    # Changed from the original code font.render(value_text, True, white)
+    slot_text = font_big.render(value_text, True, white)
     # Create a larger surface to generate the combination
-    slot_width = slot_text.get_width() + 2 * (padding + border_size)
-    slot_height = slot_text.get_height() + 2 * (padding + border_size)
+    slot_width = 200
+    slot_height = 120
     slot_text_with_borders = pygame.Surface((slot_width, slot_height), pygame.SRCALPHA)
     slot_text_with_borders.fill(fields_color)
 
     pygame.draw.rect(slot_text_with_borders, fields_color, slot_text_with_borders.get_rect(), border_size)
     
-    slot_text_with_borders.blit(slot_text, (padding + border_size, padding + border_size))
+    slot_text_with_borders.blit(slot_text, ((slot_width / 2 - slot_text.get_width() / 2), (slot_height / 2 - slot_text.get_height() / 2)))
 
     slot_text_rect = slot_text_with_borders.get_rect(center=(window_width // 2, window_height // 2))
     window.blit(slot_text_with_borders, slot_text_rect)
@@ -233,7 +253,7 @@ def display_values(value_text, border_size):
 def credit_left(credit):
     global cost_to_play, padding
     current_credit = str(credit)
-    credit_text = font.render("Credit: " + current_credit, True, fields_color)
+    credit_text = font.render("Credit: " + current_credit + " $", True, fields_color)
 
     credit_text_rect = credit_text.get_rect(center=(window_width // 2, window_height - credit_text.get_height() // 2))
     credit_text_rect.y -= padding
@@ -278,6 +298,10 @@ def main_loop():
                 if event.type == pygame.QUIT:
                     game_over = True
                     sys.exit()
+            # Draw a button that will trigger the bet_amount() function
+            button_wodth = 100
+            button_height = 70
+            
             
             # New values for the random numbers from each of the lists
             first_num = random.randint(0, len(column_A) - 1)
