@@ -31,14 +31,19 @@ pygame.display.set_caption('Slots by Vuk')
 
 # Column_A after changes
 column_A = ['7', 'B', 'B', 'B', 'W', 'W', 'R', 'P', 'P', 'P', 'P', 'P', 'P', 'P', 'L', 'L', 'L', 'L', 'L', 'C', 'C'] # 21 Characters
+# Column_B after changes
 column_B = ['7', 'B', 'B', 'W', 'W', 'R', 'R', 'R', 'R', 'R' 'P', 'P', 'P', 'L', 'L', 'L', 'L', 'L', 'C', 'C', 'C', 'C', 'C', 'C'] # 24 Characters
-column_C = ['7', 'B', 'W', 'W', 'R', 'R', 'R', 'R', 'R', 'R', 'R', 'R' 'P', 'P', 'P', 'L', 'L', 'L', 'L', 'C', 'C', 'C', 'C'] # 23 characters
+# Column_C after changes
+column_C = ['7', 'B', 'W', 'W', 'R', 'R', 'R', 'R', 'R', 'R', 'R', 'R', 'R' 'P', 'P', 'P', 'L', 'L', 'L', 'L', 'C', 'C', 'C', 'C'] # 23 characters
 
 # Game over boolean
 game_over = False
 
 # Credit
 credit = 1
+
+# Bet
+bet = 3
 
 # Add font to the game
 font = pygame.font.Font(None, 36)
@@ -57,9 +62,95 @@ game_over_color = (255, 0, 0)
 
 clock = pygame.time.Clock()
 
+# Create a new function that will check the combination that the random generators got and adjust the prize accordingly
+def combination_check(combination):
+    global credit, bet
+    # If the bet BET amount is 1
+    if bet == 1:
+        if combination[0] == '7' and combination[1] == '7' and combination[2] == '7':
+            credit += 200
+        elif combination[0] == 'B' and combination[1] == 'B' and combination[2] == 'B':
+            credit += 100
+        elif combination[0] == 'W' and combination[1] == 'W' and combination[2] == 'W':
+            credit += 100
+        elif combination[0] == 'W' and combination[1] == 'W' and combination[2] == 'B':
+            credit += 100
+        elif combination[0] == 'R' and combination[1] == 'R' and combination[2] == 'R':
+            credit += 18
+        elif combination[0] == 'R' and combination[1] == 'R' and combination[2] == 'B':
+            credit += 18
+        elif combination[0] == 'F' and combination[1] == 'F' and combination[2] == 'F':
+            credit += 14
+        elif combination[0] == 'F' and combination[1] == 'F' and combination[2] == 'B':
+            credit += 14
+        elif combination[0] == 'L' and combination[1] == 'L' and combination[2] == 'L':
+            credit += 10
+        elif combination[0] == 'L' and combination[1] == 'L' and combination[2] == 'B':
+            credit += 10
+        elif combination[0] == 'C' and combination[1] == 'C' and combination[2] == 'C':
+            credit += 5
+        elif combination[0] == 'C' and combination[1] in column_B and combination[2] in column_C:
+            credit += 2
+    elif bet == 3:
+        if combination[0] == '7' and combination[1] == '7' and combination[2] == '7':
+            credit += 600
+        elif combination[0] == 'B' and combination[1] == 'B' and combination[2] == 'B':
+            credit += 300
+        elif combination[0] == 'W' and combination[1] == 'W' and combination[2] == 'W':
+            credit += 300
+        elif combination[0] == 'W' and combination[1] == 'W' and combination[2] == 'B':
+            credit += 300
+        elif combination[0] == 'R' and combination[1] == 'R' and combination[2] == 'R':
+            credit += 54
+        elif combination[0] == 'R' and combination[1] == 'R' and combination[2] == 'B':
+            credit += 54
+        elif combination[0] == 'F' and combination[1] == 'F' and combination[2] == 'F':
+            credit += 42
+        elif combination[0] == 'F' and combination[1] == 'F' and combination[2] == 'B':
+            credit += 42
+        elif combination[0] == 'L' and combination[1] == 'L' and combination[2] == 'L':
+            credit += 30
+        elif combination[0] == 'L' and combination[1] == 'L' and combination[2] == 'B':
+            credit += 30
+        elif combination[0] == 'C' and combination[1] == 'C' and combination[2] == 'C':
+            credit += 15
+        elif combination[0] == 'C' and combination[1] in column_B and combination[2] in column_C:
+            credit += 6
+
+    elif bet == 5:
+        if combination[0] == '7' and combination[1] == '7' and combination[2] == '7':
+            credit += 1000
+        elif combination[0] == 'B' and combination[1] == 'B' and combination[2] == 'B':
+            credit += 500
+        elif combination[0] == 'W' and combination[1] == 'W' and combination[2] == 'W':
+            credit += 500
+        elif combination[0] == 'W' and combination[1] == 'W' and combination[2] == 'B':
+            credit += 500
+        elif combination[0] == 'R' and combination[1] == 'R' and combination[2] == 'R':
+            credit += 90
+        elif combination[0] == 'R' and combination[1] == 'R' and combination[2] == 'B':
+            credit += 90
+        elif combination[0] == 'F' and combination[1] == 'F' and combination[2] == 'F':
+            credit += 60
+        elif combination[0] == 'F' and combination[1] == 'F' and combination[2] == 'B':
+            credit += 60
+        elif combination[0] == 'L' and combination[1] == 'L' and combination[2] == 'L':
+            credit += 50
+        elif combination[0] == 'L' and combination[1] == 'L' and combination[2] == 'B':
+            credit += 50
+        elif combination[0] == 'C' and combination[1] == 'C' and combination[2] == 'C':
+            credit += 25
+        elif combination[0] == 'C' and combination[1] in column_B and combination[2] in column_C:
+            credit += 10
+
+    
+
+    
+        
+
 # Function that runs before the main loop, asking the user for the amount of credit they will risk
 def ask_for_credit():
-    global credit, padding
+    global credit, padding, bet
     # Values for the bottom rect that will ask for the amount of credit
     user_input = ''
     input_rect_y = window_height - (window_height // 2)
@@ -176,24 +267,49 @@ def main_loop():
                     game_over = True
                     sys.exit()
             
-            first_num = random.randint(0, 9)
-            second_num = random.randint(0, 9)
-            third_num = random.randint(0, 9)
+            # New values for the random numbers from each of the lists
+            first_num = random.randint(0, 20)
+            second_num = random.randint(0, 22)
+            third_num = random.randint(0, 22)
             # 1 / 1000 probability of winning
             combination = column_A[first_num] + column_B[second_num] + column_C[third_num]
             
             display_values(combination, border_size)
             credit_left(credit)
-            
-            if first_num == second_num and second_num == third_num:
-                
-                print("You have won!")
-                credit += 300
+
+            """
+                Introduce the new reward system of the game, the symbols drawn should be paying the next amounts of credit:
+                Bet = 1:
+                7-7-7 = 200
+                B-B-B = 100
+                W-W-W = 100
+                W-W-B = 100
+                R-R-R = 18
+                R-R-B = 18
+                F-F-F = 14
+                F-F-B = 14
+                L-L-L = 10
+                L-L-B = 10
+                C-C-ANY = 5
+                C-ANY-ANY = 2
+                The values above will change depending on the amount of BET the player has selected, there will be 3 levels of the BET amount:
+                1, 3, 5
+                Each of the bet amount multiplies the winnings by the amount of reward based on BET 1:
+                BET 1: 7-7-7 = 200; BET 3: 7-7-7 = 600; BET 5: 7-7-7 = 1000
+            """
+            # Invoke the combination_check function
+            combination_check(combination)
                 
             # Invoke the another_spin() function that will determine the next spin
             if not another_spin():
                 break
-            credit -= 1
+            # Reduce the amount of credit acording to the amount of BET
+            if bet == 1:
+                credit -= 1
+            elif bet == 3:
+                credit -= 3
+            elif bet == 5:
+                credit -= 5
         
         game_over = True
 
