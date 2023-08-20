@@ -9,11 +9,30 @@ window_width, window_height = 450, 330
 window = pygame.display.set_mode((window_width, window_height))
 pygame.display.set_caption('Slots by Vuk')
 
+# Make changes to the lists so that they contain the right amount of specific symbols
+# 1st list should contain 21 symbols
+# 2nd list should contain 24 symbols
+# 3rd list should contain 23 symbols 
+"""
+    There will be 7 different symbols that can be drawn from the lists:
+    7 - Seven
+    B - Bar
+    W - Watermellon
+    R - Ring(bell)
+    P - Plum
+    L - Lemon
+    C - Cherry
+    Each of the lists should contain a combination of these symbols in the next order:
+    Column_A = [(7 x 1), (B x 3), (W x 2), (R x 1), (P x 7) (L x 5), (C x 2)]
+    Column_B = [(7 x 1), (B x 2), (W x 2), (R x 5), (P x 3), (L x 5), (C x 6)]
+    Column_C = [(7 x 1), (B x 1), (W x 2), (R x 8), (P x 3), (L x 4), (C x 0)]
+"""
 
 
-column_A = ['A', 'S', 'D', 'F', 'G', 'H', 'J', 'K', 'L', 'Z']
-column_B = ['A', 'S', 'D', 'F', 'G', 'H', 'J', 'K', 'L', 'Z']
-column_C = ['A', 'S', 'D', 'F', 'G', 'H', 'J', 'K', 'L', 'Z']
+# Column_A after changes
+column_A = ['7', 'B', 'B', 'B', 'W', 'W', 'R', 'P', 'P', 'P', 'P', 'P', 'P', 'P', 'L', 'L', 'L', 'L', 'L', 'C', 'C'] # 21 Characters
+column_B = ['7', 'B', 'B', 'W', 'W', 'R', 'R', 'R', 'R', 'R' 'P', 'P', 'P', 'L', 'L', 'L', 'L', 'L', 'C', 'C', 'C', 'C', 'C', 'C'] # 24 Characters
+column_C = ['7', 'B', 'W', 'W', 'R', 'R', 'R', 'R', 'R', 'R', 'R', 'R' 'P', 'P', 'P', 'L', 'L', 'L', 'L', 'C', 'C', 'C', 'C'] # 23 characters
 
 # Game over boolean
 game_over = False
