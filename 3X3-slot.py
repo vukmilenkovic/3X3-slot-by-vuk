@@ -2,17 +2,9 @@ import sys
 import random
 import pygame
 
+
 # Initialize pygame
 pygame.init()
-
-window_width, window_height = 640, 480
-window = pygame.display.set_mode((window_width, window_height))
-pygame.display.set_caption('Slots by Vuk')
-
-# Make changes to the lists so that they contain the right amount of specific symbols
-# 1st list should contain 21 symbols
-# 2nd list should contain 24 symbols
-# 3rd list should contain 23 symbols 
 """
     There will be 7 different symbols that can be drawn from the lists:
     7 - Seven
@@ -27,8 +19,34 @@ pygame.display.set_caption('Slots by Vuk')
     Column_B = [(7 x 1), (B x 2), (W x 2), (R x 5), (P x 3), (L x 5), (C x 6)]
     Column_C = [(7 x 1), (B x 1), (W x 2), (R x 8), (P x 3), (L x 4), (C x 0)]
 """
+"""
+    Introduce the new reward system of the game, the symbols drawn should be paying the next amounts of credit:
+    Bet = 1:
+    7-7-7 = 200
+    B-B-B = 100
+    W-W-W = 100
+    W-W-B = 100
+    R-R-R = 18
+    R-R-B = 18
+    F-F-F = 14
+    F-F-B = 14
+    L-L-L = 10
+    L-L-B = 10
+    C-C-ANY = 5
+    C-ANY-ANY = 2
+    The values above will change depending on the amount of BET the player has selected, there will be 3 levels of the BET amount:
+    1, 3, 5
+    Each of the bet amount multiplies the winnings by the amount of reward based on BET 1:
+    BET 1: 7-7-7 = 200; BET 3: 7-7-7 = 600; BET 5: 7-7-7 = 1000
+"""
 
+window_width, window_height = 640, 480
+window = pygame.display.set_mode((window_width, window_height))
+pygame.display.set_caption('Slots by Vuk')
 
+# 1st list should contain 21 symbols
+# 2nd list should contain 24 symbols
+# 3rd list should contain 23 symbols 
 # Column_A after changes
 column_A = ['7', 'B', 'B', 'B', 'W', 'W', 'R', 'P', 'P', 'P', 'P', 'P', 'P', 'P', 'L', 'L', 'L', 'L', 'L', 'C', 'C'] # 21 Characters
 # Column_B after changes
@@ -327,26 +345,6 @@ def main_loop():
             display_values(combination, border_size)
             credit_left(credit)
 
-            """
-                Introduce the new reward system of the game, the symbols drawn should be paying the next amounts of credit:
-                Bet = 1:
-                7-7-7 = 200
-                B-B-B = 100
-                W-W-W = 100
-                W-W-B = 100
-                R-R-R = 18
-                R-R-B = 18
-                F-F-F = 14
-                F-F-B = 14
-                L-L-L = 10
-                L-L-B = 10
-                C-C-ANY = 5
-                C-ANY-ANY = 2
-                The values above will change depending on the amount of BET the player has selected, there will be 3 levels of the BET amount:
-                1, 3, 5
-                Each of the bet amount multiplies the winnings by the amount of reward based on BET 1:
-                BET 1: 7-7-7 = 200; BET 3: 7-7-7 = 600; BET 5: 7-7-7 = 1000
-            """
             # Invoke the combination_check function
             combination_check(combination)
             
