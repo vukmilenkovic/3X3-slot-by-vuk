@@ -46,12 +46,13 @@ credit = 1
 bet = 3
 
 # Add font to the game
+font_small = pygame.font.Font(None, 16)
 font = pygame.font.Font(None, 36)
 font_big = pygame.font.Font(None, 72)
 font_medium = pygame.font.Font(None, 52)
 
 # Mouse
-mouse = pygame.mouse.get_pos()
+# mouse = pygame.mouse.get_pos()
 
 # Cost of a spin
 cost_to_play = 1
@@ -68,23 +69,12 @@ game_over_color = (255, 0, 0)
 clock = pygame.time.Clock()
 
 # Write a function that will display a button while the game is running which will influence the amount of BET user shooses, 1,3 or 5
-def bet_amount():
+def handle_bet_button_click():
     global bet
-    # Every time the user clicks on the button the bet should move one step up: from 1 to 3, from 3 to 5, from 5 to 1
-    for event in pygame.event.get():
-          
-        if event.type == pygame.QUIT:
-            pygame.quit()
-              
-        #checks if a mouse is clicked
-        if event.type == pygame.MOUSEBUTTONDOWN:
-              
-            #if the mouse is clicked on the
-            # button the game is terminated
-            if window_width/2 <= mouse[0] <= window_width/2+140 and window_height/2 <= mouse[1] <= window_height/2+40:
-                pygame.quit()
-
-
+    bet_options = [1, 3, 5]  # Available bet options
+    bet_index = bet_options.index(bet)
+    bet_index = (bet_index + 1) % len(bet_options)  # Cycle through the bet options
+    bet = bet_options[bet_index]
 
 # Create a new function that will check the combination that the random generators got and adjust the prize accordingly
 def combination_check(combination):
@@ -249,6 +239,9 @@ def display_values(value_text, border_size):
     slot_text_rect = slot_text_with_borders.get_rect(center=(window_width // 2, window_height // 2))
     window.blit(slot_text_with_borders, slot_text_rect)
 
+    
+
+
 # A function that displays the users remeindeing credit
 def credit_left(credit):
     global cost_to_play, padding
@@ -269,11 +262,31 @@ def another_spin():
     message_rect = message.get_rect(center=(window_width // 2, message.get_height() // 2))
     message_rect.y += padding
     window.blit(message, message_rect)
+    
+    # Display the bet button
+    button_y = window_height / 2 - 30
+    button_x = window_width / 3 - 150
+    button_message_top = font_small.render('BET:', True, white)
+    button_message_bottom = font.render('X' + str(bet), True, white)
+
+    button_rect = pygame.Rect(button_x, button_y, 100, 70)
+    pygame.draw.rect(window, fields_color, button_rect)
+
+    button_message_top_rect = button_message_top.get_rect(center=(button_rect.centerx, button_rect.centery - 20))
+    window.blit(button_message_top, button_message_top_rect)
+
+    button_message_bottom_rect = button_message_bottom.get_rect(center=(button_rect.centerx, button_rect.centery + 10))
+    window.blit(button_message_bottom, button_message_bottom_rect)
+
     pygame.display.update()
+
+
     
     # Set a timer for the duration of the message
     message_duration = 60000 #miliseconds
     start_time = pygame.time.get_ticks()
+
+    
     while pygame.time.get_ticks() - start_time < message_duration:
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
@@ -283,35 +296,34 @@ def another_spin():
             if event.type == pygame.KEYDOWN:
                 if event.key == pygame.K_SPACE:
                     return True
+            if event.type == pygame.MOUSEBUTTONDOWN:
+                    mouse_x, mouse_y = pygame.mouse.get_pos()
+                    if button_rect.collidepoint(mouse_x, mouse_y):
+                        handle_bet_button_click()
     return False
 
 # Main loop
 def main_loop():
-    global column_A, column_B, column_C, credit, game_over 
+    global column_A, column_B, column_C, credit, game_over
     border_size = 0
 
     while not game_over:
         ask_for_credit()
         while credit > cost_to_play:
+            
             # The ability to quit the game
             for event in pygame.event.get():
                 if event.type == pygame.QUIT:
                     game_over = True
                     sys.exit()
-            # Draw a button that will trigger the bet_amount() function
-            button_wodth = 100
-            button_height = 70
-            
-            
+    
             # New values for the random numbers from each of the lists
             first_num = random.randint(0, len(column_A) - 1)
             second_num = random.randint(0, len(column_B) - 1)
             third_num = random.randint(0, len(column_C) - 1)
             # 1 / 1000 probability of winning
             combination = column_A[first_num] + column_B[second_num] + column_C[third_num]
-            if len(combination) > 3:
-                print(combination)
-            
+        
             display_values(combination, border_size)
             credit_left(credit)
 
@@ -337,7 +349,7 @@ def main_loop():
             """
             # Invoke the combination_check function
             combination_check(combination)
-                
+            
             # Invoke the another_spin() function that will determine the next spin
             if not another_spin():
                 break
